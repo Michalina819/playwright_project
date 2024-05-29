@@ -13,7 +13,6 @@ test.describe('user login do Demobank', () => {
     const userPassword = loginData.userPassword;
     const expectedUserName = 'Jan Demobankowy';
 
-
     const loginPage = new LoginPage(page);
     await loginPage.loginInput.fill(userID);
     await loginPage.passwordIndput.fill(userPassword);
@@ -28,10 +27,11 @@ test.describe('user login do Demobank', () => {
     const incorrectUserId = 'tester';
     const expectedErrorMessage = 'identyfikator ma min. 8 znaków';
 
-    await page.getByTestId('login-input').fill(incorrectUserId);
-    await page.getByTestId('password-input').click();
+    const loginPage = new LoginPage(page);
+    await loginPage.loginInput.fill(incorrectUserId);
+    await loginPage.passwordIndput.click();
 
-    await expect(page.getByTestId('error-login-id')).toHaveText(expectedErrorMessage);
+    await expect(loginPage.loginError).toHaveText(expectedErrorMessage);
   });
 
   test('unsuccessful login with too short password', async ({ page }) => {
@@ -40,11 +40,12 @@ test.describe('user login do Demobank', () => {
     const incorretcUserPassword = '104';
     const expectedErrorMessage = 'hasło ma min. 8 znaków';
 
-    await page.getByTestId('login-input').fill(userID);
-    await page.getByTestId('password-input').fill(incorretcUserPassword);
-    await page.getByTestId('password-input').blur();
+    const loginPage = new LoginPage(page);
+    await loginPage.loginInput.fill(userID);
+    await loginPage.passwordIndput.fill(incorretcUserPassword);
+    await loginPage.passwordIndput.blur();
 
-    await expect(page.getByTestId('error-login-password')).toHaveText(expectedErrorMessage);
+    await expect(loginPage.passwordError).toHaveText(expectedErrorMessage);
 
   });
 
