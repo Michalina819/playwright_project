@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { loginData } from '../test-data/login.data';
+import { LoginPage } from '../pages/login.page';
 
 test.describe('payment tests', () => {
 
@@ -8,9 +9,11 @@ test.describe('payment tests', () => {
         const userPassword = loginData.userPassword;
 
         await page.goto('/')
-        await page.getByTestId('login-input').fill(userID);
-        await page.getByTestId('password-input').fill(userPassword);
-        await page.getByTestId('login-button').click();
+        const loginPage = new LoginPage(page);
+        await loginPage.loginInput.fill(userID);
+        await loginPage.passwordIndput.fill(userPassword);
+        await loginPage.loginButton.click();
+
         await page.getByRole('link', { name: 'płatności' }).click();
     });
 
@@ -20,6 +23,7 @@ test.describe('payment tests', () => {
         const transferAccount = '12 3456 7891 2345 6789 1234 5678';
         const transferAmount = '1500';
         const expectedMessage = `Przelew wykonany! ${transferAmount},00PLN dla ${transferReceiver}`;
+
 
         await page.getByTestId('transfer_receiver').fill(transferReceiver);
         await page.getByTestId('form_account_to').fill(transferAccount);
