@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { loginData } from '../test-data/login.data';
 import { LoginPage } from '../pages/login.page';
+import { DesktopPage } from '../pages/desktop.page';
 
 test.describe('desktop test', () => {
 
@@ -16,20 +17,20 @@ test.describe('desktop test', () => {
     });
 
     test('quick payment with correct data', async ({ page }) => {
-        const recevierID = '2';
+        const recevierId = '2';
         const transferAmount = '120';
         const transferTitle = 'zwrot srodkow';
         const expectedTransferReceiver = 'Chuck Demobankowy';
 
-
-        await page.locator('#widget_1_transfer_receiver').selectOption(recevierID);
-        await page.locator('#widget_1_transfer_amount').fill(transferAmount);
-        await page.locator('#widget_1_transfer_title').fill(transferTitle);
+        const desktopPage = new DesktopPage(page);
+        await desktopPage.recevierIdInput.selectOption(recevierId);
+        await desktopPage.transferAmountInput.fill(transferAmount);
+        await desktopPage.transferTitleInput.fill(transferTitle);
 
         await page.getByRole('button', { name: 'wykonaj' }).click();
         await page.getByTestId('close-button').click();
 
-        await expect(page.locator('#show_messages')).toHaveText(`Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`);
+        await expect(desktopPage.expectedTransferReceiverText).toHaveText(`Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`);
     });
 
     test('successful mobile top-up', async ({ page }) => {
@@ -37,8 +38,11 @@ test.describe('desktop test', () => {
         const topUpAmount = '50';
         const expectedMessage = `Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpReceiver}`;
 
-        await page.locator('#widget_1_topup_receiver').selectOption(topUpReceiver);
-        await page.locator('#widget_1_topup_amount').fill(topUpAmount);
+        const desktopPage = new DesktopPage(page);
+        await desktopPage.topUpReceiverInput.selectOption(topUpReceiver);
+        await desktopPage.topUpAmountInput.fill(topUpAmount);
+        //await page.locator('#widget_1_topup_receiver').selectOption(topUpReceiver);
+        // await page.locator('#widget_1_topup_amount').fill(topUpAmount);
         await page.locator('#uniform-widget_1_topup_agreement span').click();
 
         await page.getByRole('button', { name: 'doładuj telefon' }).click();
