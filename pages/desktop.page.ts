@@ -10,4 +10,7 @@ export class DesktopPage {
 
     topUpReceiverInput = this.page.locator('#widget_1_topup_receiver');
     topUpAmountInput = this.page.locator('#widget_1_topup_amount');
+    topUpAgreementCheckbox = this.page.locator('#uniform-widget_1_topup_agreement span');
+
+    topUpIncorrect = this.page.getByTestId('error-widget-1-topup-amount');
 }

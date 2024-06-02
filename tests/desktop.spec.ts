@@ -21,6 +21,7 @@ test.describe('desktop test', () => {
         const transferAmount = '120';
         const transferTitle = 'zwrot srodkow';
         const expectedTransferReceiver = 'Chuck Demobankowy';
+        const expectedMessageTransfer = `Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`;
 
         const desktopPage = new DesktopPage(page);
         await desktopPage.recevierIdInput.selectOption(recevierId);
@@ -30,38 +31,36 @@ test.describe('desktop test', () => {
         await page.getByRole('button', { name: 'wykonaj' }).click();
         await page.getByTestId('close-button').click();
 
-        await expect(desktopPage.expectedTransferReceiverText).toHaveText(`Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`);
+        await expect(desktopPage.expectedTransferReceiverText).toHaveText(expectedMessageTransfer);
     });
 
     test('successful mobile top-up', async ({ page }) => {
         const topUpReceiver = '500 xxx xxx';
         const topUpAmount = '50';
-        const expectedMessage = `Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpReceiver}`;
+        const topUpExpectedMessage = `Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpReceiver}`;
 
         const desktopPage = new DesktopPage(page);
         await desktopPage.topUpReceiverInput.selectOption(topUpReceiver);
         await desktopPage.topUpAmountInput.fill(topUpAmount);
-        //await page.locator('#widget_1_topup_receiver').selectOption(topUpReceiver);
-        // await page.locator('#widget_1_topup_amount').fill(topUpAmount);
-        await page.locator('#uniform-widget_1_topup_agreement span').click();
+        await desktopPage.topUpAgreementCheckbox.click();
 
         await page.getByRole('button', { name: 'doładuj telefon' }).click();
         await page.getByTestId('close-button').click();
 
-        await expect(page.locator('#show_messages')).toHaveText(expectedMessage);
+        await expect(desktopPage.expectedTransferReceiverText).toHaveText(topUpExpectedMessage);
     });
-    test('correct balance after successful mobile top-up', async ({ page }) => {
+    test('unsuccessful mobile top-up', async ({ page }) => {
         const topUpReceiver = '500 xxx xxx';
-        const topUpAmount = '50';
-        const initialBalance = await page.locator('#money_value').innerText();
-        const expectedBalance = Number(initialBalance) - Number(topUpAmount);
+        const topUpAmount = '508888888';
+        const errorMessage = 'kwota musi być mniejsza lub równa 150'
 
-        await page.locator('#widget_1_topup_receiver').selectOption(topUpReceiver);
-        await page.locator('#widget_1_topup_amount').fill(topUpAmount);
-        await page.locator('#uniform-widget_1_topup_agreement span').click();
-        await page.getByRole('button', { name: 'doładuj telefon' }).click();
-        await page.getByTestId('close-button').click();
+        const desktopPage = new DesktopPage(page);
+        await desktopPage.topUpReceiverInput.selectOption(topUpReceiver);
+        await desktopPage.topUpAmountInput.fill(topUpAmount);
+        await desktopPage.topUpAgreementCheckbox.click();
 
-        await expect(page.locator('#money_value')).toHaveText(`${expectedBalance}`);
+        await expect(desktopPage.topUpIncorrect).toHaveText(errorMessage);
+        // await page.getByTestId('error-widget-1-topup-amount').click();
+
     });
 });
