@@ -60,7 +60,6 @@ test.describe('desktop test', () => {
         await desktopPage.topUpAgreementCheckbox.click();
 
         await expect(desktopPage.topUpIncorrect).toHaveText(errorMessage);
-        // await page.getByTestId('error-widget-1-topup-amount').click();
 
     });
 });
