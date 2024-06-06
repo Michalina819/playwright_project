@@ -19,7 +19,6 @@ test.describe('payment tests', () => {
     });
 
     test('simple payment', async ({ page }) => {
-
         const transferReceiver = 'Jan Nowak';
         const transferAccount = '12 3456 7891 2345 6789 1234 5678';
         const transferAmount = '1500';
@@ -31,8 +30,8 @@ test.describe('payment tests', () => {
         await paymentPage.accountNumber.fill(transferAccount);
         await paymentPage.amountInput.fill(transferAmount);
 
-        await page.getByRole('button', { name: 'wykonaj przelew' }).click();
-        await page.getByTestId('close-button').click();
+        await paymentPage.transferButton.click();
+        await paymentPage.actionCloseButton.click();
 
         await expect(paymentPage.transferMessage).toHaveText(expectedMessage);
 

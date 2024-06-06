@@ -28,8 +28,8 @@ test.describe('desktop test', () => {
         await desktopPage.transferAmountInput.fill(transferAmount);
         await desktopPage.transferTitleInput.fill(transferTitle);
 
-        await page.getByRole('button', { name: 'wykonaj' }).click();
-        await page.getByTestId('close-button').click();
+        await desktopPage.actionButton.click();
+        await desktopPage.closeButtonAction.click();
 
         await expect(desktopPage.expectedTransferReceiverText).toHaveText(expectedMessageTransfer);
     });
@@ -44,8 +44,8 @@ test.describe('desktop test', () => {
         await desktopPage.topUpAmountInput.fill(topUpAmount);
         await desktopPage.topUpAgreementCheckbox.click();
 
-        await page.getByRole('button', { name: 'doładuj telefon' }).click();
-        await page.getByTestId('close-button').click();
+        await desktopPage.actionButtonAmount.click();
+        await desktopPage.closeButtonAction.click();
 
         await expect(desktopPage.expectedTransferReceiverText).toHaveText(topUpExpectedMessage);
     });

@@ -12,5 +12,10 @@ export class DesktopPage {
     topUpAmountInput = this.page.locator('#widget_1_topup_amount');
     topUpAgreementCheckbox = this.page.locator('#uniform-widget_1_topup_agreement span');
 
+    actionButton = this.page.getByRole('button', { name: 'wykonaj' });
+    closeButtonAction = this.page.getByTestId('close-button');
+
+    actionButtonAmount = this.page.getByRole('button', { name: 'doładuj telefon' });
+
     topUpIncorrect = this.page.getByTestId('error-widget-1-topup-amount');
 }
