@@ -5,6 +5,7 @@ import { PaymentPage } from '../pages/payment.page';
 import { DesktopPage } from '../pages/desktop.page';
 
 test.describe('payment tests', () => {
+    let paymentPage: PaymentPage;
 
     test.beforeEach(async ({ page }) => {
         const userID = loginData.userID;
@@ -12,12 +13,12 @@ test.describe('payment tests', () => {
 
         await page.goto('/')
         const loginPage = new LoginPage(page);
-        await loginPage.loginInput.fill(userID);
-        await loginPage.passwordIndput.fill(userPassword);
-        await loginPage.loginButton.click();
+        await loginPage.login(userID, userPassword);
 
         const desktopPage = new DesktopPage(page);
-        await desktopPage.sideMenu.paymentButton.click();
+        await desktopPage.sideMenuComponent.paymentLink.click();
+
+        paymentPage = new PaymentPage(page);
 
     });
 
@@ -27,8 +28,6 @@ test.describe('payment tests', () => {
         const transferAmount = '1500';
         const expectedMessage = `Przelew wykonany! ${transferAmount},00PLN dla ${transferReceiver}`;
 
-
-        const paymentPage = new PaymentPage(page);
         await paymentPage.nameTransferReceiver.fill(transferReceiver);
         await paymentPage.accountNumber.fill(transferAccount);
         await paymentPage.amountInput.fill(transferAmount);

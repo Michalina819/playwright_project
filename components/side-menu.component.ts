@@ -1,8 +1,5 @@
-import { Page } from "@playwright/test";
-
 export class SideMenuComponent {
-    constructor(private page: Page) {}
+    constructor(private page) { }
 
-        paymentButton = this.page.getByRole('link', { name: 'płatności' });
-    
+    paymentLink = this.page.getByRole('link', { name: 'płatności' });
 }

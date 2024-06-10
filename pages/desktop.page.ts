@@ -4,7 +4,7 @@ import { SideMenuComponent } from "../components/side-menu.component";
 export class DesktopPage {
     constructor(private page: Page) { }
 
-    sideMenu = new SideMenuComponent(this.page);
+    sideMenuComponent = new SideMenuComponent(this.page);
 
     recevierIdInput = this.page.locator('#widget_1_transfer_receiver');
     transferAmountInput = this.page.locator('#widget_1_transfer_amount');
