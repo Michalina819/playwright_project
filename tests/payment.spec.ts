@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { loginData } from '../test-data/login.data';
 import { LoginPage } from '../pages/login.page';
 import { PaymentPage } from '../pages/payment.page';
+import { DesktopPage } from '../pages/desktop.page';
 
 test.describe('payment tests', () => {
 
@@ -15,7 +16,9 @@ test.describe('payment tests', () => {
         await loginPage.passwordIndput.fill(userPassword);
         await loginPage.loginButton.click();
 
-        await page.getByRole('link', { name: 'płatności' }).click();
+        const desktopPage = new DesktopPage(page);
+        await desktopPage.sideMenu.paymentButton.click();
+
     });
 
     test('simple payment', async ({ page }) => {
