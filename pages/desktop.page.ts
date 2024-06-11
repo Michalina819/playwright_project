@@ -21,4 +21,29 @@ export class DesktopPage {
     actionButtonAmount = this.page.getByRole('button', { name: 'doładuj telefon' });
 
     topUpIncorrect = this.page.getByTestId('error-widget-1-topup-amount');
+
+    async makeQuickPayment(
+        recevierId: string,
+        transferAmount: string,
+        transferTitle: string
+    ): Promise<void> {
+        await this.recevierIdInput.selectOption(recevierId);
+        await this.transferAmountInput.fill(transferAmount);
+        await this.transferTitleInput.fill(transferTitle);
+
+        await this.actionButton.click();
+        await this.closeButtonAction.click();
+    }
+
+    async makeQucikMobilePayment(
+        topUpReceiver: string,
+        topUpAmount: string
+    ): Promise<void> {
+        await this.topUpReceiverInput.selectOption(topUpReceiver);
+        await this.topUpAmountInput.fill(topUpAmount);
+        await this.topUpAgreementCheckbox.click();
+
+        await this.actionButtonAmount.click();
+        await this.closeButtonAction.click();
+    }
 }

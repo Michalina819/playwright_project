@@ -24,12 +24,7 @@ test.describe('desktop test', () => {
         const expectedTransferReceiver = 'Chuck Demobankowy';
         const expectedMessageTransfer = `Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`;
 
-        await desktopPage.recevierIdInput.selectOption(recevierId);
-        await desktopPage.transferAmountInput.fill(transferAmount);
-        await desktopPage.transferTitleInput.fill(transferTitle);
-
-        await desktopPage.actionButton.click();
-        await desktopPage.closeButtonAction.click();
+        await desktopPage.makeQuickPayment(recevierId, transferAmount, transferTitle);
 
         await expect(desktopPage.expectedTransferReceiverText).toHaveText(expectedMessageTransfer);
     });
@@ -39,12 +34,7 @@ test.describe('desktop test', () => {
         const topUpAmount = '50';
         const topUpExpectedMessage = `Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpReceiver}`;
 
-        await desktopPage.topUpReceiverInput.selectOption(topUpReceiver);
-        await desktopPage.topUpAmountInput.fill(topUpAmount);
-        await desktopPage.topUpAgreementCheckbox.click();
-
-        await desktopPage.actionButtonAmount.click();
-        await desktopPage.closeButtonAction.click();
+        await desktopPage.makeQucikMobilePayment(topUpReceiver, topUpAmount);
 
         await expect(desktopPage.expectedTransferReceiverText).toHaveText(topUpExpectedMessage);
     });
